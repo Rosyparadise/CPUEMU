@@ -19,32 +19,54 @@ public class Process {
     public void run() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process starts running */
-        pcb.setState(ProcessState.RUNNING,CPU.clock);
-        
+        if (pcb.getState()!=ProcessState.RUNNING)
+            pcb.setState(ProcessState.RUNNING,CPU.clock);
+        burstTime--;
         
     }
     
     public void waitInBackground() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process stops running */
+        pcb.setState(ProcessState.READY,CPU.clock);
         
     }
     
-    public double getWaitingTime() {
+    public double getWaitingTime()
+    {
         /* TODO: you need to add some code here
          * and change the return value */
-        return 0;
+        int waitingTime=0;
+        if (pcb.getStartTimes().size()==0)
+            waitingTime=CPU.clock-arrivalTime;
+        else
+        {
+            waitingTime=CPU.clock-arrivalTime;
+            for (int i=0;i<pcb.getStartTimes().size();i++)
+            {
+                waitingTime+=pcb.getStopTimes().get(i)-pcb.getStartTimes().get(i);
+            }
+        }
+        return waitingTime;
     }
     
     public double getResponseTime() {
         /* TODO: you need to add some code here
          * and change the return value */
-        return 0;
+        int responseTime=0;
+        if (pcb.getStartTimes().size()==0)
+            responseTime=CPU.clock-arrivalTime;
+        else if (pcb.getStartTimes().size()>0)
+            responseTime=pcb.getStartTimes().get(0)-arrivalTime;
+        
+        return responseTime;
     }
     
     public double getTurnAroundTime() {
         /* TODO: you need to add some code here
          * and change the return value */
-        return 0;
+        double turnAroundTime=0;
+        turnAroundTime=burstTime+getWaitingTime();
+        return turnAroundTime;
     }
 }
