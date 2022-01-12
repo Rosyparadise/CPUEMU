@@ -17,7 +17,8 @@ public class ProcessControlBlock {
         this.stopTimes = new ArrayList<Integer>();
         /* TODO: you need to add some code here
          * Hint: every process should get a unique PID */
-        this.pid = 0; // change this line
+        pidTotal++;
+        this.pid = pidTotal; // change this line
         
     }
     
@@ -25,11 +26,19 @@ public class ProcessControlBlock {
         return this.state;
     }
     
-    public void setState(ProcessState state, int currentClockTime) {
+    public void setState(ProcessState state, int currentClockTime)
+    {
         /* TODO: you need to add some code here
          * Hint: update this.state, but also include currentClockTime
          * in startTimes/stopTimes */
+        if (this.state==ProcessState.RUNNING && state==ProcessState.READY)
+            stopTimes.add(currentClockTime);
+        else if (state==ProcessState.RUNNING)
+            startTimes.add(currentClockTime);
+        else if (state==ProcessState.TERMINATED)
+            stopTimes.add(currentClockTime);
         
+        this.state=state;
     }
     
     public int getPid() {

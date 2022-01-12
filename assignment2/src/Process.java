@@ -19,6 +19,8 @@ public class Process {
     public void run() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process starts running */
+        pcb.setState(ProcessState.RUNNING,CPU.clock);
+        
         
     }
     
