@@ -1,5 +1,6 @@
+
 public class MemorySlot {
-    
+
     private int start; // the address where the memory slot starts
     private int end;   // the address where the memory slot ends
     private final int blockStart; // address of where the block starts
@@ -17,29 +18,33 @@ public class MemorySlot {
         this.blockStart = blockStart;
         this.blockEnd = blockEnd;
     }
+
+    public int getSizeAvail(){
+        return (this.end - this.start);
+    }
     
     public int getBlockStart() {
         return blockStart;
     }
-    
+
     public int getBlockEnd() {
         return blockEnd;
     }
-    
+
     public int getStart() {
         return start;
     }
-    
+
     public void setStart(int start) {
         this.start = start;
     }
-    
+
     public int getEnd() {
         return end;
     }
-    
+
     public void setEnd(int end) {
         this.end = end;
     }
-    
+
 }
