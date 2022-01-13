@@ -69,4 +69,8 @@ public class Process {
         turnAroundTime=burstTime+getWaitingTime();
         return turnAroundTime;
     }
+    
+      public int getMemoryRequirements(){
+        return memoryRequirements;
+    }
 }
