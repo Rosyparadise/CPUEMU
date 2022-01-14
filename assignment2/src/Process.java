@@ -4,12 +4,14 @@ public class Process {
     private int arrivalTime;
     private int burstTime;
     private int memoryRequirements;
+    private int address;
     
     public Process(int arrivalTime, int burstTime, int memoryRequirements) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.memoryRequirements = memoryRequirements;
         this.pcb = new ProcessControlBlock();
+        this.address= -1;
     }
     
     public ProcessControlBlock getPCB() {
@@ -70,7 +72,15 @@ public class Process {
         return turnAroundTime;
     }
     
-      public int getMemoryRequirements(){
+    public int getMemoryRequirements(){
         return memoryRequirements;
+    }
+
+    public int getAddress(){
+        return address;
+    }
+
+    public void setAddress(int address){
+        this.address=address;
     }
 }
