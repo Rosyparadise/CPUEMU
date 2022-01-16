@@ -24,6 +24,10 @@ public class CPU {
     public void tick() {
         /* TODO: you need to add some code here
          * Hint: this method should run once for every CPU cycle */
+        //if it fits add proccess to Scheduler.proccesses
         
     }
+    
+    //MIGHT NOT NEED I DONT REMEMBER WHY I DID THIS
+    public Process[] getProcesses() {return processes;}
 }

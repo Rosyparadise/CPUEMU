@@ -1,4 +1,3 @@
-
 public class Process {
     private ProcessControlBlock pcb;
     private int arrivalTime;
@@ -33,7 +32,6 @@ public class Process {
         pcb.setState(ProcessState.READY,CPU.clock);
         
     }
-    
     public double getWaitingTime()
     {
         /* TODO: you need to add some code here
@@ -75,12 +73,14 @@ public class Process {
     public int getMemoryRequirements(){
         return memoryRequirements;
     }
-
+    
     public int getAddress(){
         return address;
     }
-
+    
     public void setAddress(int address){
         this.address=address;
     }
+    
+    public int getBurstTime(){return burstTime;}
 }
