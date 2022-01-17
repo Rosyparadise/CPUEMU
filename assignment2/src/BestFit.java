@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class BestFit extends MemoryAllocationAlgorithm {
-    
+
     public BestFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
@@ -16,16 +16,12 @@ public class BestFit extends MemoryAllocationAlgorithm {
         int closestToMemory = 2147483647 ;
 
         while(i < currentlyUsedMemorySlots.size()) {
-            if (currentlyUsedMemorySlots.get(i).getSizeAvail() < pSize){
-                i++;
-                continue;
-            }else{
-                if(currentlyUsedMemorySlots.get(i).getSizeAvail() < closestToMemory){
-                    closestToMemory = currentlyUsedMemorySlots.get(i).getSizeAvail();
-                    address = currentlyUsedMemorySlots.get(i).getStart();
-                    fit = true;
-                    blockNum = i;
-                }
+           
+            if(currentlyUsedMemorySlots.get(i).getSizeAvail() >= pSize && currentlyUsedMemorySlots.get(i).getSizeAvail() < closestToMemory){
+                closestToMemory = currentlyUsedMemorySlots.get(i).getSizeAvail();
+                address = currentlyUsedMemorySlots.get(i).getStart();
+                fit = true;
+                blockNum = i;
             }
             i++;
         }
