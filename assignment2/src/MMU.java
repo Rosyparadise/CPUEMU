@@ -41,7 +41,7 @@ public class MMU {
         }
         return fit;
     }
-    //!!!!!!!!!!!!!!!!!!!!!!!CHANGE STATE TO READY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //!!!!!!!!!!!!!!!!!!!!!!!CHANGE STATE TO READY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private void updateMemory(){
         //accessing the array of processes that have been added in the cpu
         for (int i=0; i<runningProcesses.size(); i++){
