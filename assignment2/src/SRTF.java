@@ -7,6 +7,8 @@ public class SRTF extends Scheduler {
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+        p.getPCB().setState(ProcessState.READY,CPU.clock);
+        processes.add(p);
     }
     
     public Process getNextProcess() {
@@ -15,25 +17,21 @@ public class SRTF extends Scheduler {
 
             if (processes.size()!=0)
             {
-                if (lastprocess == null)
+
+                int min=processes.get(0).getBurstTime();
+                int pos=0;
+                for (int i=0;i<processes.size();i++)
                 {
-                    lastprocess=processes.get(0);
+                    //must pop out terminated process before doing this
+                    if (processes.get(i).getBurstTime()<min)
+                        min=processes.get(i).getBurstTime();
+                    pos=i;
                 }
-                else
-                {
-                    int min=processes.get(0).getBurstTime();
-                    int pos=0;
-                    for (int i=0;i<processes.size();i++)
-                    {
-                        //must pop out terminated process before doing this
-                        if (processes.get(i).getBurstTime()<min)
-                            min=processes.get(i).getBurstTime();
-                            pos=i;
-                    }
-                    if (lastprocess.getPCB().getState()!=ProcessState.TERMINATED)
-                        lastprocess.getPCB().setState(ProcessState.READY,CPU.clock);
-                    lastprocess=processes.get(pos);
-                }
+                //!!!!!!!!!!!!MADE CHANGES THINK ABOUT IT. REMOVED IF LASTPROC==NULL
+                if ( lastprocess!=null && lastprocess.getPCB().getState()!=ProcessState.TERMINATED)
+                    lastprocess.getPCB().setState(ProcessState.READY,CPU.clock);
+                lastprocess=processes.get(pos);
+
                 lastprocess.getPCB().setState(ProcessState.RUNNING,CPU.clock);
                 //have to decrease bursttime with each tick in CPU
                 //if bursttime==0 change lastprocess to null

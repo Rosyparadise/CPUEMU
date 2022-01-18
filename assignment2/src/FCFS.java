@@ -7,6 +7,7 @@ public class FCFS extends Scheduler {
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+        p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
     
@@ -19,8 +20,15 @@ public class FCFS extends Scheduler {
         {
 
             //prepei na to kanoume kai gia ta memoryslots!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            processes.get(0).getPCB().setState(ProcessState.RUNNING,CPU.clock);
-            return processes.get(0);
+            for (int i=0;i<processes.size();i++)
+            {
+                if (processes.get(i).getPCB().getState()!=ProcessState.TERMINATED)
+                {
+                    processes.get(i).getPCB().setState(ProcessState.RUNNING,CPU.clock);
+                    return processes.get(i);
+                }
+            }
+
             //in cpu if bursttime==0 set process as TERMINATED and remove it from memory slot
             //will be saved in tick() as a temp process variable and from there currentprocess will get its value.
             //statement to check if process is done in cpu before running getnextprocess

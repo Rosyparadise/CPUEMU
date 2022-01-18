@@ -83,4 +83,7 @@ public class Process {
     }
     
     public int getBurstTime(){return burstTime;}
+    public void setBurstTime(int burstTime){this.burstTime=burstTime;}
+
+    public int getArrivalTime(){return arrivalTime;}
 }

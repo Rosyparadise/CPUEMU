@@ -5,7 +5,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
     public FirstFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
-
+    
     public int fitProcess(Process p, ArrayList<MemorySlot> currentlyUsedMemorySlots) {
         /* TODO: you need to add some code here
          * Hint: this should return the memory address where the process was
@@ -16,13 +16,14 @@ public class FirstFit extends MemoryAllocationAlgorithm {
         int pSize= p.getMemoryRequirements();
         //updateProcessState
         for (MemorySlot s:currentlyUsedMemorySlots){
-            if(s.getSizeAvail()-1>=pSize && !fit){
+            if(s.getSizeAvail()>=pSize){
                 fit=true;
                 address=s.getStart();
-                s.setStart(s.getStart()+pSize-1);
+                s.setStart(s.getStart()+pSize+1);
+                break;
             }
         }
         return address;
     }
-
+    
 }

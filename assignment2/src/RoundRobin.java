@@ -16,6 +16,7 @@ public class RoundRobin extends Scheduler {
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+        p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
     

@@ -6,32 +6,41 @@ public class NextFit extends MemoryAllocationAlgorithm {
         super(availableBlockSizes);
         this.currentBlock = 0;
     }
-
+    
     public int fitProcess(Process p, ArrayList<MemorySlot> currentlyUsedMemorySlots) {
         boolean fit = false;
         int address = -1;
-
+        
         int pSize= p.getMemoryRequirements();
-        //updateProcessState
         int i = currentBlock;
-
+        boolean flag=false;
         while(i < currentlyUsedMemorySlots.size()){
-            if (currentlyUsedMemorySlots.get(i).getSizeAvail() -1 >= pSize && !fit){
-                currentBlock++;
+
+            if (currentlyUsedMemorySlots.get(i).getSizeAvail() >= pSize)
+            {
+                currentBlock=i+1;
                 fit=true;
                 address=currentlyUsedMemorySlots.get(i).getStart();
-                currentlyUsedMemorySlots.get(i).setStart(currentlyUsedMemorySlots.get(i).getStart()+pSize-1);
-            }else{
-                i++;
+                currentlyUsedMemorySlots.get(i).setStart(currentlyUsedMemorySlots.get(i).getStart()+pSize+1);
+                break;
             }
+            i++;
+            if (i>currentlyUsedMemorySlots.size()-1)
+            {
+                i=0;
+                flag=true;
+            }
+            if (flag && i==currentBlock)
+                break;
         }
-
+        
+        
         /* TODO: you need to add some code here
          * Hint: this should return the memory address where the process was
          * loaded into if the process fits. In case the process doesn't fit, it
          * should return -1. */
-
+        
         return address;
     }
-
+    
 }
