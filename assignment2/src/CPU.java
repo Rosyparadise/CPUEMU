@@ -11,6 +11,9 @@ public class CPU {
     private int currentProcess;
     private Process currentObjproc;
     private boolean enoughIsEnough;
+    private boolean largerThan;
+    private boolean RRchange;
+    private int tempQuantum;
 
     
     public CPU(Scheduler scheduler, MMU mmu, Process[] processes) {
@@ -21,6 +24,15 @@ public class CPU {
         currentProcess=-1;
         currentObjproc=null;
         enoughIsEnough=false;
+        largerThan=false;
+        if (scheduler instanceof RoundRobin)
+        {
+            tempQuantum=0;
+            RRchange=false;
+        }
+
+
+
         for (int i=0;i<processes.length;i++)
         {
             list_processes.add(processes[i]);
@@ -36,6 +48,8 @@ public class CPU {
                 if(mmu.loadProcessIntoRAM(list_processes.get(i)))
                 {
                     clock++;
+                    if (scheduler instanceof SRTF && currentProcess!=-1 && list_processes.get(i).getBurstTime()<currentObjproc.getBurstTime())
+                        largerThan=true;
                     scheduler.addProcess(list_processes.get(i));
                     list_processes.remove(list_processes.get(i));
                     return true;
@@ -71,7 +85,7 @@ public class CPU {
             Process temp = scheduler.getNextProcess();
             if (temp!=null)
             {
-                currentObjproc = scheduler.getNextProcess();
+                currentObjproc = temp;
                 currentProcess=currentObjproc.getAddress();
                 clock+=2;
                 return;
@@ -79,9 +93,47 @@ public class CPU {
 
         }
 
+        else if (scheduler instanceof SRTF && (largerThan || currentProcess==-1))
+        {
+            Process temp = scheduler.getNextProcess();
+            if (temp!=null)
+            {
+                currentObjproc = temp;
+                currentProcess=currentObjproc.getAddress();
+                clock+=2;
+                return;
+            }
+            largerThan=false;
+        }
+
+        else if (scheduler instanceof RoundRobin && (currentProcess==-1 || RRchange))
+        {
+            Process temp = scheduler.getNextProcess();
+            if (temp!=null)
+            {
+                currentObjproc = temp;
+                currentProcess=currentObjproc.getAddress();
+                clock+=2;
+                return;
+            }
+            RRchange=false;
+        }
+
+
+
+
         if (currentProcess!=-1)
         {
             currentObjproc.setBurstTime(currentObjproc.getBurstTime()-1);
+            if (scheduler instanceof RoundRobin) {
+                tempQuantum++;
+                if (tempQuantum== ((RoundRobin) scheduler).getQuantum())
+                {
+                    RRchange=true;
+                    tempQuantum=0;
+                }
+
+            }
             if (currentObjproc.getBurstTime() == 0) {
                 currentObjproc.getPCB().setState(ProcessState.TERMINATED, clock);
                 scheduler.processes.remove(currentProcess);
@@ -93,7 +145,5 @@ public class CPU {
             enoughIsEnough=true;
         clock++;
     }
-    
-    //MIGHT NOT NEED I DONT REMEMBER WHY I DID THIS
-    public Process[] getProcesses() {return processes;}
+
 }

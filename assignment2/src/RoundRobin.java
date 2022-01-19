@@ -50,5 +50,7 @@ public class RoundRobin extends Scheduler {
             lastProcess=null;
         return lastProcess;
     }
+
+    public int getQuantum(){return quantum;}
 }
 
