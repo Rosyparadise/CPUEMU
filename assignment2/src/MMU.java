@@ -19,13 +19,13 @@ public class MMU {
         
         while(i < availableBlockSizes.length){
             // !!!!!!!this maybe? dunno!!!!!!!!
-            currentlyUsedMemorySlots.add(new MemorySlot(previousEnd + 1, previousEnd + 1 + availableBlockSizes[i], previousEnd+1, previousEnd + 1 + availableBlockSizes[i])) ;
+            currentlyUsedMemorySlots.add(new MemorySlot(previousEnd + 1, previousEnd + availableBlockSizes[i], previousEnd+1, previousEnd + availableBlockSizes[i])) ;
             previousEnd += availableBlockSizes[i];
             i++;
         }
     }
 
-    public static void selectionSort(ArrayList<Process> array) {
+    private void selectionSort(ArrayList<Process> array) {
         for (int i = 0; i < array.size(); i++) {
             int min = array.get(i).getAddress();
             int minId = i;

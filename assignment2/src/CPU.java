@@ -13,6 +13,7 @@ public class CPU {
     private boolean enoughIsEnough;
     private boolean largerThan;
     private boolean RRchange;
+    private boolean removed;
     private int tempQuantum;
 
     
@@ -25,19 +26,32 @@ public class CPU {
         currentObjproc=null;
         enoughIsEnough=false;
         largerThan=false;
-        if (scheduler instanceof RoundRobin)
-        {
-            tempQuantum=0;
-            RRchange=false;
-        }
-
+        RRchange=false;
+        tempQuantum=0;
 
 
         for (int i=0;i<processes.length;i++)
         {
             list_processes.add(processes[i]);
         }
+
+        for (int i = 0; i < list_processes.size(); i++)
+        {
+            int min = list_processes.get(i).getArrivalTime();
+            int minId = i;
+            for (int j = i+1; j < list_processes.size(); j++) {
+                if (list_processes.get(j).getArrivalTime() < min) {
+                    min = list_processes.get(j).getArrivalTime();
+                    minId = j;
+                }
+            }
+            Process temp = list_processes.get(i);
+            list_processes.set(i,list_processes.get(minId));
+            list_processes.set(minId,temp);
+        }
     }
+
+
     //FOR SRTF= IF ITS NULL INFINITELY MANY PROCESSES MAY BE ADDED, IF ITS NOT ONLY ONE AT A TIME.
     private boolean nextProcess()
     {
@@ -78,10 +92,11 @@ public class CPU {
         /* TODO: you need to add some code here
          * Hint: this method should run once for every CPU cycle */
         //if it fits add proccess to Scheduler.proccesses
+        removed=false;
+
         if (currentProcess==-1 || (scheduler instanceof SRTF && !largerThan))
         {
             if (nextProcess()) {
-
                 //clock++;
                 return;
             }
@@ -124,43 +139,50 @@ public class CPU {
 
         else if (scheduler instanceof RoundRobin && (currentProcess==-1 || RRchange))
         {
+            System.out.println(clock+" IN RR");
             Process temp = scheduler.getNextProcess();
             if (temp!=null)
             {
                 currentObjproc = temp;
                 currentProcess=currentObjproc.getAddress();
+                System.out.println(clock+" IN RR");
                 clock+=2;
+                RRchange=false;
                 return;
             }
-            RRchange=false;
         }
 
         //CAN MERGE ALL 3 ALGORITHMS INTO ONE IF.
-
 
         if (currentProcess!=-1)
         {
             currentObjproc.setBurstTime(currentObjproc.getBurstTime()-1);
             System.out.println(clock+" burst time reduced to "+ currentObjproc.getBurstTime()+" ADDRESS IS "+ currentObjproc.getAddress());
-            if (scheduler instanceof RoundRobin) {
-                tempQuantum++;
-                if (tempQuantum== ((RoundRobin) scheduler).getQuantum())
-                {
-                    RRchange=true;
-                    tempQuantum=0;
-                }
 
-            }
             if (currentObjproc.getBurstTime() == 0) {
                 currentObjproc.getPCB().setState(ProcessState.TERMINATED, clock);
                 mmu.loadProcessIntoRAM(null);
                 scheduler.processes.remove(currentObjproc);
                 currentObjproc = null;
                 currentProcess = -1;
+                removed=true;
             }
         }
-        if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0) {
-            System.out.println(clock+" NO OPERATION");
+        if (scheduler instanceof RoundRobin)
+        {
+            tempQuantum++;
+            if (tempQuantum== ((RoundRobin) scheduler).getQuantum())
+            {
+                RRchange=true;
+                tempQuantum=0;
+                currentObjproc = null;
+                currentProcess = -1;
+            }
+
+        }//CLOCK -1 IS SAFE CLOCK AND CLOCK + 1 ???? CLOCK + 1 SEEMS TO GIVE CORRECT ANSWER
+        if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0 ||(currentProcess==-1 && scheduler.processes.size()==0 && clock+1>list_processes.get(list_processes.size()-1).getArrivalTime() && !removed))
+        {
+            System.out.println(clock+1+" NO OPERATION");
             enoughIsEnough = true;
         }
         clock++;
