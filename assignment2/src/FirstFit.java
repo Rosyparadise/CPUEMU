@@ -11,19 +11,23 @@ public class FirstFit extends MemoryAllocationAlgorithm {
          * Hint: this should return the memory address where the process was
          * loaded into if the process fits. In case the process doesn't fit, it
          * should return -1. */
-        boolean fit = false;
-        int address = -1;
-        int pSize= p.getMemoryRequirements();
-        //updateProcessState
-        for (MemorySlot s:currentlyUsedMemorySlots){
-            if(s.getSizeAvail()>=pSize){
-                fit=true;
-                address=s.getStart();
-                s.setStart(s.getStart()+pSize+1);
-                break;
+        if (p != null)
+        {
+            boolean fit = false;
+            int address = -1;
+            int pSize = p.getMemoryRequirements();
+            //updateProcessState
+            for (MemorySlot s : currentlyUsedMemorySlots) {
+                if (s.getSizeAvail() >= pSize) {
+                    fit = true;
+                    address = s.getStart();
+                    s.setStart(s.getStart() + pSize);
+                    break;
+                }
             }
+            return address;
         }
-        return address;
+        return -1;
     }
     
 }

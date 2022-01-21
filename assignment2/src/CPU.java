@@ -38,21 +38,28 @@ public class CPU {
             list_processes.add(processes[i]);
         }
     }
-
+    //FOR SRTF= IF ITS NULL INFINITELY MANY PROCESSES MAY BE ADDED, IF ITS NOT ONLY ONE AT A TIME.
     private boolean nextProcess()
     {
         for (int i=0;i<list_processes.size();i++)
         {
             if (list_processes.get(i).getArrivalTime()<=clock)
             {
-                if(mmu.loadProcessIntoRAM(list_processes.get(i)))
+                if (currentProcess!=-1&&list_processes.get(i).getBurstTime()<currentObjproc.getBurstTime())
+                    largerThan=true;
+
+                if (largerThan ||currentProcess==-1)
                 {
-                    clock++;
-                    if (scheduler instanceof SRTF && currentProcess!=-1 && list_processes.get(i).getBurstTime()<currentObjproc.getBurstTime())
-                        largerThan=true;
-                    scheduler.addProcess(list_processes.get(i));
-                    list_processes.remove(list_processes.get(i));
-                    return true;
+                    if(mmu.loadProcessIntoRAM(list_processes.get(i)))
+                    {
+                        System.out.println(clock+"  new process ");
+                        clock++;
+                        scheduler.addProcess(list_processes.get(i));
+                        list_processes.remove(list_processes.get(i));
+                        return true;
+                    }
+                    else
+                        largerThan=false;
                 }
             }
         }
@@ -71,22 +78,26 @@ public class CPU {
         /* TODO: you need to add some code here
          * Hint: this method should run once for every CPU cycle */
         //if it fits add proccess to Scheduler.proccesses
+        if (currentProcess==-1 || (scheduler instanceof SRTF && !largerThan))
+        {
+            if (nextProcess()) {
 
-        if (currentProcess==-1)
-            if (nextProcess())
-            {
                 //clock++;
                 return;
             }
+        }
 
 
         if (scheduler instanceof FCFS && currentProcess==-1)
         {
+            System.out.println(clock+" IN FCFS");
+
             Process temp = scheduler.getNextProcess();
             if (temp!=null)
             {
                 currentObjproc = temp;
                 currentProcess=currentObjproc.getAddress();
+                System.out.println(clock+1+" IN FCFS");
                 clock+=2;
                 return;
             }
@@ -95,15 +106,20 @@ public class CPU {
 
         else if (scheduler instanceof SRTF && (largerThan || currentProcess==-1))
         {
+            System.out.println(clock+" IN SRTF");
+
             Process temp = scheduler.getNextProcess();
             if (temp!=null)
             {
                 currentObjproc = temp;
                 currentProcess=currentObjproc.getAddress();
+                System.out.println(clock+1+" IN SRTF");
                 clock+=2;
+                largerThan=false;
                 return;
             }
-            largerThan=false;
+
+
         }
 
         else if (scheduler instanceof RoundRobin && (currentProcess==-1 || RRchange))
@@ -119,12 +135,13 @@ public class CPU {
             RRchange=false;
         }
 
-
+        //CAN MERGE ALL 3 ALGORITHMS INTO ONE IF.
 
 
         if (currentProcess!=-1)
         {
             currentObjproc.setBurstTime(currentObjproc.getBurstTime()-1);
+            System.out.println(clock+" burst time reduced to "+ currentObjproc.getBurstTime()+" ADDRESS IS "+ currentObjproc.getAddress());
             if (scheduler instanceof RoundRobin) {
                 tempQuantum++;
                 if (tempQuantum== ((RoundRobin) scheduler).getQuantum())
@@ -136,13 +153,16 @@ public class CPU {
             }
             if (currentObjproc.getBurstTime() == 0) {
                 currentObjproc.getPCB().setState(ProcessState.TERMINATED, clock);
-                scheduler.processes.remove(currentProcess);
+                mmu.loadProcessIntoRAM(null);
+                scheduler.processes.remove(currentObjproc);
                 currentObjproc = null;
                 currentProcess = -1;
             }
         }
-        if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0)
-            enoughIsEnough=true;
+        if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0) {
+            System.out.println(clock+" NO OPERATION");
+            enoughIsEnough = true;
+        }
         clock++;
     }
 

@@ -64,7 +64,7 @@ public class MMU {
 
             if (runningProcesses.get(i).getPCB().getState()==ProcessState.TERMINATED){
                 //if terminated or ready it must be removed from cpu
-                
+
                 //padress is the address given to the terminated process and also the start of the empty slot
                 int pAddress = runningProcesses.get(i).getAddress();
                 int pBlock=-1;
@@ -73,6 +73,7 @@ public class MMU {
                 {
                    if (pAddress>=currentlyUsedMemorySlots.get(k).getBlockStart() && pAddress<=currentlyUsedMemorySlots.get(k).getBlockEnd())
                    {
+
                        pBlock=k;
                        break;
                    }
@@ -98,9 +99,8 @@ public class MMU {
                         pAddress+=processestobemoved.get(k).getMemoryRequirements();
 
                     }
-                    currentlyUsedMemorySlots.get(pBlock).setStart(pAddress);
                 }
-
+                currentlyUsedMemorySlots.get(pBlock).setStart(pAddress);
                 runningProcesses.remove(i);
                 i--;
             }
