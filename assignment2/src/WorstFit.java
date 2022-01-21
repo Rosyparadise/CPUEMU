@@ -17,10 +17,10 @@ public class WorstFit extends MemoryAllocationAlgorithm {
 
             int maxBlock = findMaxSlot(currentlyUsedMemorySlots);
 
-            if (maxBlock >= pSize) {
+            if (currentlyUsedMemorySlots.get(maxBlock).getSizeAvail() >= pSize) {
                 address = currentlyUsedMemorySlots.get(maxBlock).getStart();
                 fit = true;
-                currentlyUsedMemorySlots.get(maxBlock).setStart(currentlyUsedMemorySlots.get(maxBlock).getStart() + pSize + 1);
+                currentlyUsedMemorySlots.get(maxBlock).setStart(currentlyUsedMemorySlots.get(maxBlock).getStart() + pSize);
             }
 
             /* TODO: you need to add some code here
@@ -37,8 +37,10 @@ public class WorstFit extends MemoryAllocationAlgorithm {
         int maxBlock = 0;
         int maxSize = currentlyUsedMemorySlots.get(0).getSizeAvail();
         
-        for(int i=1; i<currentlyUsedMemorySlots.size(); i++){
-            if(maxSize < currentlyUsedMemorySlots.get(i).getSizeAvail()){
+        for(int i=1; i<currentlyUsedMemorySlots.size(); i++)
+        {
+            if(maxSize < currentlyUsedMemorySlots.get(i).getSizeAvail())
+            {
                 maxBlock = i;
                 maxSize = currentlyUsedMemorySlots.get(i).getSizeAvail();
             }

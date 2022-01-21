@@ -105,13 +105,14 @@ public class CPU {
 
         if (scheduler instanceof FCFS && currentProcess==-1)
         {
-            System.out.println(clock+" IN FCFS");
+
 
             Process temp = scheduler.getNextProcess();
             if (temp!=null)
             {
                 currentObjproc = temp;
                 currentProcess=currentObjproc.getAddress();
+                System.out.println(clock+" IN FCFS");
                 System.out.println(clock+1+" IN FCFS");
                 clock+=2;
                 return;
@@ -182,7 +183,7 @@ public class CPU {
         }//CLOCK -1 IS SAFE CLOCK AND CLOCK + 1 ???? CLOCK + 1 SEEMS TO GIVE CORRECT ANSWER
         if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0 ||(currentProcess==-1 && scheduler.processes.size()==0 && clock+1>list_processes.get(list_processes.size()-1).getArrivalTime() && !removed))
         {
-            System.out.println(clock+1+" NO OPERATION");
+            System.out.println(clock+" NO OPERATION "+list_processes.size());
             enoughIsEnough = true;
         }
         clock++;

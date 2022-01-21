@@ -7,7 +7,7 @@ public class PC {
         final Process[] processes = {
                 // Process parameters are: arrivalTime, burstTime, memoryRequirements (kB)
                 new Process(0, 5, 5),
-                new Process(1,4,5),
+                new Process(1,4,50),
                 new Process(2,5,15),
                 new Process(15,1,40),
                 new Process(4, 5, 5),
@@ -16,10 +16,9 @@ public class PC {
                 new Process(17,15,40),
                 new Process(100,3,40),
                 new Process(106,1,500)
-                //new Process(8,3,1)
         };
-        final int[] availableBlockSizes = {20, 5,40}; // sizes in kB
-        MemoryAllocationAlgorithm algorithm = new BestFit(availableBlockSizes);
+        final int[] availableBlockSizes = {5, 20,40}; // sizes in kB
+        MemoryAllocationAlgorithm algorithm = new NextFit(availableBlockSizes);
         MMU mmu = new MMU(availableBlockSizes, algorithm);
         Scheduler scheduler = new SRTF();
         CPU cpu = new CPU(scheduler, mmu, processes);

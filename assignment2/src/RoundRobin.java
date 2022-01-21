@@ -4,7 +4,7 @@ public class RoundRobin extends Scheduler {
     private int quantum;
     private Process lastProcess;
     public RoundRobin() {
-        this.quantum = 1; // default quantum
+        this.quantum = 3; // default quantum
         /* TODO: you _may_ need to add some code here */
         lastProcess= null;
     }
