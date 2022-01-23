@@ -1,30 +1,32 @@
 import java.util.ArrayList;
 
 public class MMU {
-    
-    private final int[] availableBlockSizes; //MEMORY
+
+    private final int[] availableBlockSizes;
     private MemoryAllocationAlgorithm algorithm;
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
-    private ArrayList<Process> runningProcesses;
-    
+    private ArrayList<Process> runningProcesses; //arraylist of the processes that are stored in the memory right now
+
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
         this.algorithm = algorithm;
         this.currentlyUsedMemorySlots = new ArrayList<MemorySlot>();
         this.runningProcesses= new ArrayList<Process>();
-        
+
         int i=1;
+
+        //matching each memory slot with the size given in the availableBlockSizes
         int previousEnd = availableBlockSizes[0] - 1;
         currentlyUsedMemorySlots.add(new MemorySlot(0, previousEnd, 0, previousEnd));
-        
+
         while(i < availableBlockSizes.length){
-            // !!!!!!!this maybe? dunno!!!!!!!!
             currentlyUsedMemorySlots.add(new MemorySlot(previousEnd + 1, previousEnd + availableBlockSizes[i], previousEnd+1, previousEnd + availableBlockSizes[i])) ;
             previousEnd += availableBlockSizes[i];
             i++;
         }
     }
 
+    //sorts an arraylist of processes based on the addresses - ascending order
     private void selectionSort(ArrayList<Process> array) {
         for (int i = 0; i < array.size(); i++) {
             int min = array.get(i).getAddress();
@@ -40,24 +42,27 @@ public class MMU {
             array.set(minId,temp);
         }
     }
-    
+
+    //runs the given algorithm and returns whether or not the process fit in RAM
     public boolean loadProcessIntoRAM(Process p) {
         /* TODO: you need to add some code here
          * Hint: this should return true if the process was able to fit into memory
          * and false if not
          * */
         boolean fit = false;
-        updateMemory();
-        int add= algorithm.fitProcess(p, currentlyUsedMemorySlots);
+        updateMemory(); 
+        int add= algorithm.fitProcess(p, currentlyUsedMemorySlots); //address of the process is -1 if it did not fit and any other number if it did
         if(add != -1){
             fit = true;
-            p.getPCB().setState(ProcessState.READY,CPU.clock);
+            p.getPCB().setState(ProcessState.READY,CPU.clock); 
             p.setRAMarrivalClock(CPU.clock);
             p.setAddress(add);
             runningProcesses.add(p);
         }
         return fit;
     }
+    
+    //checks for processes that may have been terminated and if so, organises the memory
     private void updateMemory(){
         //accessing the array of processes that have been added in the cpu
         for (int i=0; i<runningProcesses.size(); i++){
@@ -70,31 +75,25 @@ public class MMU {
                 int pAddress = runningProcesses.get(i).getAddress();
                 int pBlock=-1;
                 //pblock is the block where the terminated process is located
-                for (int k=0;k< currentlyUsedMemorySlots.size();k++)
-                {
-                   if (pAddress>=currentlyUsedMemorySlots.get(k).getBlockStart() && pAddress<=currentlyUsedMemorySlots.get(k).getBlockEnd())
-                   {
+                for (int k=0;k< currentlyUsedMemorySlots.size();k++) {
+                    if (pAddress>=currentlyUsedMemorySlots.get(k).getBlockStart() && pAddress<=currentlyUsedMemorySlots.get(k).getBlockEnd()) {
 
-                       pBlock=k;
-                       break;
-                   }
+                        pBlock=k;
+                        break;
+                    }
                 }
                 ArrayList<Process> processestobemoved = new ArrayList<>();
 
                 //accessing the following cpu running processes contained in the same block as the terminated process
-                for (int k=0;k<runningProcesses.size();k++)
-                {
-                    if (runningProcesses.get(k).getAddress()>pAddress && runningProcesses.get(k).getAddress()<currentlyUsedMemorySlots.get(pBlock).getBlockEnd())
-                    {
+                for (int k=0;k<runningProcesses.size();k++) {
+                    if (runningProcesses.get(k).getAddress()>pAddress && runningProcesses.get(k).getAddress()<currentlyUsedMemorySlots.get(pBlock).getBlockEnd()) {
                         processestobemoved.add(runningProcesses.get(k));
                     }
                 }
                 //relocating all following addresses higher on the cpu table, the first process gets the address of the terminated one
-                if (processestobemoved.size()!=0)
-                {
+                if (processestobemoved.size()!=0) {
                     selectionSort(processestobemoved);
-                    for (int k=0;k<processestobemoved.size();k++)
-                    {
+                    for (int k=0;k<processestobemoved.size();k++) {
                         //the next free address that can accommodate a process
                         processestobemoved.get(k).setAddress(pAddress);
                         pAddress+=processestobemoved.get(k).getMemoryRequirements();
