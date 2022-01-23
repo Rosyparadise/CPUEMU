@@ -19,7 +19,6 @@ public class FirstFit extends MemoryAllocationAlgorithm {
             int pSize = p.getMemoryRequirements();
             //updateProcessState
             for (MemorySlot s : currentlyUsedMemorySlots) {
-                System.out.println("SIZE AVAIL: "+s.getSizeAvail());
                 if (s.getSizeAvail() >= pSize) {
                     fit = true;
                     address = s.getStart();

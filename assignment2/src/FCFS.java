@@ -2,11 +2,11 @@ public class FCFS extends Scheduler {
     
     public FCFS() {
         /* TODO: you _may_ need to add some code here */
-        /* BLANK FOR NOW */
     }
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+        //Adds process to available processes. Also changes state to READY.
         p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
@@ -14,12 +14,12 @@ public class FCFS extends Scheduler {
     public Process getNextProcess() {
         /* TODO: you need to add some code here
          * and change the return value */
-        //UPDATE AVAILABLE PROCESS EACH TICK (I THINK, IM VERY SLEEPY)
-        //will be called again when its ready for another process >:)
+
+        //run only if there are available processes in RAM
         if (processes.size()!=0)
         {
 
-            //prepei na to kanoume kai gia ta memoryslots!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //find the first unterminated process, set state to RUNNING and return it to the CPU
             for (int i=0;i<processes.size();i++)
             {
                 if (processes.get(i).getPCB().getState()!=ProcessState.TERMINATED)
@@ -29,9 +29,6 @@ public class FCFS extends Scheduler {
                 }
             }
 
-            //in cpu if bursttime==0 set process as TERMINATED and remove it from memory slot
-            //will be saved in tick() as a temp process variable and from there currentprocess will get its value.
-            //statement to check if process is done in cpu before running getnextprocess
         }
         
         return null;

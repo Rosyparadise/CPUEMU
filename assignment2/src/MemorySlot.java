@@ -17,7 +17,8 @@ public class MemorySlot {
         this.blockStart = blockStart;
         this.blockEnd = blockEnd;
     }
-    
+
+    //return available size
     public int getSizeAvail(){
         return (this.end - this.start+1);
     }

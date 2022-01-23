@@ -16,16 +16,19 @@ public class RoundRobin extends Scheduler {
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+
+        //Adds process to available processes. Also changes state to READY.
         p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
     
-    //assume if there exists a process with the same clock time as the swap, that it's already in the memory slot
     public Process getNextProcess() {
         /* TODO: you need to add some code here
          * and change the return value */
+
         if (processes.size()!=0)
         {
+            //if there is no running process get the first one available and change state to RUNNING
             if (lastProcess==null)
             {
                 lastProcess=processes.get(0);
@@ -34,19 +37,20 @@ public class RoundRobin extends Scheduler {
             else
             {
 
-                //pos=processes.indexOf(lastProcess);
+                //if there is, add it to the end of the available processes and change state to READY
                 if (lastProcess.getPCB().getState()!=ProcessState.TERMINATED)
                 {
                     processes.remove(lastProcess);
                     processes.add(lastProcess);
-                    lastProcess.getPCB().setState(ProcessState.READY,CPU.clock);
+                    lastProcess.waitInBackground();
                 }
 
                 lastProcess=processes.get(0);
                 lastProcess.getPCB().setState(ProcessState.RUNNING,CPU.clock);
             }
         }
-        else if (lastProcess!=null && lastProcess.getPCB().getState()==ProcessState.TERMINATED)//simplified to else?
+        //in case the running process got terminated and there are no other available processes
+        else if (lastProcess!=null && lastProcess.getPCB().getState()==ProcessState.TERMINATED)
             lastProcess=null;
         return lastProcess;
     }

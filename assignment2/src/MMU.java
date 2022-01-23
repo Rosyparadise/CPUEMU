@@ -52,6 +52,7 @@ public class MMU {
         if(add != -1){
             fit = true;
             p.getPCB().setState(ProcessState.READY,CPU.clock);
+            p.setRAMarrivalClock(CPU.clock);
             p.setAddress(add);
             runningProcesses.add(p);
         }

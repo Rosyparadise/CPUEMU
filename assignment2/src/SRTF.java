@@ -7,6 +7,7 @@ public class SRTF extends Scheduler {
     
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
+        //Adds process to available processes. Also changes state to READY.
         p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
@@ -17,29 +18,28 @@ public class SRTF extends Scheduler {
 
             if (processes.size()!=0)
             {
-
-
+                //find available process with the least burst time.
                 int min=processes.get(0).getBurstTime();
                 int pos=0;
                 for (int i=0;i<processes.size();i++)
                 {
-                    //must pop out terminated process before doing this
                     if (processes.get(i).getBurstTime()<min)
                     {
                         min = processes.get(i).getBurstTime();
                         pos = i;
                     }
                 }
-                //!!!!!!!!!!!!MADE CHANGES THINK ABOUT IT. REMOVED IF LASTPROC==NULL
+                //set state of current process to READY
                 if ( lastprocess!=null && lastprocess.getPCB().getState()!=ProcessState.TERMINATED)
-                    lastprocess.getPCB().setState(ProcessState.READY,CPU.clock);
+                    lastprocess.waitInBackground();
                 lastprocess=processes.get(pos);
 
+                //swap state to the one with the least burst time and switch its state to RUNNING
                 lastprocess.getPCB().setState(ProcessState.RUNNING,CPU.clock);
-                //have to decrease bursttime with each tick in CPU
-                //if bursttime==0 change lastprocess to null
             }
-            else if (lastprocess!=null && lastprocess.getPCB().getState()==ProcessState.TERMINATED)//simplified to else?
+
+            //in case the running process got terminated and there are no other available processes
+            else if (lastprocess!=null && lastprocess.getPCB().getState()==ProcessState.TERMINATED)
                 lastprocess=null;
 
 
