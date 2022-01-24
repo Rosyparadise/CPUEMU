@@ -1,3 +1,4 @@
+/**This class represents a Central Processing Unit. */
 import java.util.ArrayList;
 
 public class CPU {
@@ -25,7 +26,11 @@ public class CPU {
 
     private int tempQuantum;
 
-    
+    /**Class constructor.
+     * @param scheduler the base class for the scheduler algorithms
+     * @param mmu the memory management unit
+     * @param processes an array list containing the processes that should be completed.
+     */
     public CPU(Scheduler scheduler, MMU mmu, Process[] processes) {
         this.scheduler = scheduler;
         this.mmu = mmu;
@@ -64,7 +69,9 @@ public class CPU {
         }
     }
 
-    //loads process into RAM when a process is terminated or an interruption has occurred.
+    /**This method loads process into RAM when a process is terminated or an interruption has occurred.
+     * @return true if the process was able to fit into the RAM, false if not.
+     * */
     private boolean nextProcess()
     {
         for (int i=0;i<list_processes.size();i++)
@@ -91,7 +98,8 @@ public class CPU {
         return false;
     }
 
-    //runs each clock cycle until enoughIsEnough is true
+    /**This method runs each clock cycle until enoughIsEnough is true.
+     * */
     public void run() {
         /* TODO: you need to add some code here
          * Hint: you need to run tick() in a loop, until there is nothing else to do... */
@@ -106,7 +114,10 @@ public class CPU {
 
         //Stat testing can be done here using list_processes_STATS
     }
-    
+
+    /**This method represents a clock cycle. It gets a process, schedules it and checks if the program needs to
+     * be terminated.
+     * */
     public void tick() {
         /* TODO: you need to add some code here
          * Hint: this method should run once for every CPU cycle */
@@ -179,4 +190,5 @@ public class CPU {
         }
         clock++;
     }
+
 }

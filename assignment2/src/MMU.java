@@ -1,3 +1,4 @@
+/** This class represents a Memory Management Unit. It is responsible for loading processes into the RAM based on an algorithm */
 import java.util.ArrayList;
 
 public class MMU {
@@ -7,6 +8,10 @@ public class MMU {
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
     private ArrayList<Process> runningProcesses; //arraylist of the processes that are stored in the memory right now
 
+    /**Class constructor.
+     * @param availableBlockSizes is the block sizes of memory that the PC has to offer for the accommodation of processes
+     * @param algorithm is the algorithm based on which the memory will be managed
+     */
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
         this.algorithm = algorithm;
@@ -26,7 +31,8 @@ public class MMU {
         }
     }
 
-    //sorts an arraylist of processes based on the addresses - ascending order
+    /**This method sorts an arraylist of processes based on the addresses - ascending order.
+     * @param array is the arraylist to be sorted*/
     private void selectionSort(ArrayList<Process> array) {
         for (int i = 0; i < array.size(); i++) {
             int min = array.get(i).getAddress();
@@ -43,7 +49,9 @@ public class MMU {
         }
     }
 
-    //runs the given algorithm and returns whether or not the process fit in RAM
+    /**This method runs the given algorithm in an effort to load a process into the RAM
+     * @param p is a process
+     * @return true if the process was able to fit into memory and false if not */
     public boolean loadProcessIntoRAM(Process p) {
         /* TODO: you need to add some code here
          * Hint: this should return true if the process was able to fit into memory
@@ -61,8 +69,8 @@ public class MMU {
         }
         return fit;
     }
-    
-    //checks for processes that may have been terminated and if so, organises the memory
+
+  /** This method checks for processes that may have been terminated and if so, organises the memory */
     private void updateMemory(){
         //accessing the array of processes that have been added in the cpu
         for (int i=0; i<runningProcesses.size(); i++){
@@ -83,7 +91,6 @@ public class MMU {
                     }
                 }
                 ArrayList<Process> processestobemoved = new ArrayList<>();
-
                 //accessing the following cpu running processes contained in the same block as the terminated process
                 for (int k=0;k<runningProcesses.size();k++) {
                     if (runningProcesses.get(k).getAddress()>pAddress && runningProcesses.get(k).getAddress()<currentlyUsedMemorySlots.get(pBlock).getBlockEnd()) {
@@ -97,7 +104,6 @@ public class MMU {
                         //the next free address that can accommodate a process
                         processestobemoved.get(k).setAddress(pAddress);
                         pAddress+=processestobemoved.get(k).getMemoryRequirements();
-
                     }
                 }
                 currentlyUsedMemorySlots.get(pBlock).setStart(pAddress);

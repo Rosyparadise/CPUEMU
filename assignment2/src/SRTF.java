@@ -1,17 +1,24 @@
+/**This class implements the Shortest Remaining Time First scheduling algorithm */
 public class SRTF extends Scheduler {
     private Process lastprocess;
+
+    /**Class Constructor. */
     public SRTF() {
         /* TODO: you _may_ need to add some code here */
         lastprocess= null;
     }
-    
+
+    /**This method adds a new process to available processes and also changes its state to READY.
+     * @param p  a process*/
     public void addProcess(Process p) {
         /* TODO: you need to add some code here */
         //Adds process to available processes. Also changes state to READY.
         p.getPCB().setState(ProcessState.READY,CPU.clock);
         processes.add(p);
     }
-    
+
+    /**This method finds the next process that will be executed based on the Shortest Remaining Time First algorithm.
+     * @return the process the will be executed next*/
     public Process getNextProcess() {
         /* TODO: you need to add some code here
          * and change the return value */
