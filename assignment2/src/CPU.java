@@ -81,7 +81,7 @@ public class CPU {
             {
                 if (currentProcess!=-1&&list_processes.get(i).getBurstTime()<currentObjproc.getBurstTime())
                     largerThan=true;
-                if (largerThan ||currentProcess==-1)
+                if (largerThan ||currentProcess==-1 || scheduler instanceof RoundRobin && scheduler.processes.size()==1 && tempQuantum==0)
                 {
                     if(mmu.loadProcessIntoRAM(list_processes.get(i)))
                     {
@@ -125,9 +125,11 @@ public class CPU {
 
         removed=false;
         //gets next process if the process got terminated or quantum ended or new process has smaller bursttime.
-        if (currentProcess==-1 || (scheduler instanceof SRTF && !largerThan))
+        if (currentProcess==-1 || (scheduler instanceof SRTF && !largerThan) || (scheduler instanceof RoundRobin && scheduler.processes.size()==1 && tempQuantum==0))
         {
             if (nextProcess()) {
+                if (scheduler instanceof RoundRobin && scheduler.processes.size()==2 && tempQuantum==0)
+                    RRchange=true;
                 //clock++;
                 return;
             }
@@ -177,8 +179,16 @@ public class CPU {
             {
                 RRchange=true;
                 tempQuantum=0;
-                currentObjproc = null;
-                currentProcess = -1;
+                //in case there's only one process in RAM, don't call scheduler, keep running the same process until its finished
+                if (scheduler.processes.size()!=1)
+                {
+                    currentObjproc = null;
+                    currentProcess = -1;
+
+                }
+                else
+                    RRchange=false;
+
             }
         }
 
