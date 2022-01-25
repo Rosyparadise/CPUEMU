@@ -2,8 +2,9 @@ import java.util.ArrayList;
 
 /**This class represents a Central Processing Unit. */
 public class CPU {
-    
-    public static int clock = 0; // this should be incremented on every CPU cycle
+
+    // this should be incremented on every CPU cycle
+    public static int clock = 0;
 
     private Scheduler scheduler;
     private MMU mmu;
@@ -13,7 +14,7 @@ public class CPU {
     //USED FOR STATS
     private ArrayList<Process> list_processes_STATS;
     private int currentProcess;
-    //saves the currect object running on the cpu
+    //saves the current object running on the cpu
     private Process currentObjproc;
     //flag that is used to decide when the program is terminated
     private boolean enoughIsEnough;
@@ -180,6 +181,7 @@ public class CPU {
                 currentProcess = -1;
             }
         }
+
         /*program is terminated when there are no processes waiting to be brought to RAM, no processes in ram and no process in CPU.
         * its also terminated when there is a process waiting to be situated in a memory slot but there can never be enough room for it.*/
         if ( list_processes.size()==0 && currentProcess==-1 && scheduler.processes.size()==0 ||(currentProcess==-1 && scheduler.processes.size()==0 && clock+1>list_processes.get(list_processes.size()-1).getArrivalTime() && !removed))

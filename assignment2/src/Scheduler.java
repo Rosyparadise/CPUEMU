@@ -18,7 +18,8 @@ public abstract class Scheduler {
     
     /** The removeProcess() method should remove a process from the list
      * of processes that are candidates for execution. Common for all
-     * schedulers. */
+     * schedulers.
+     * @param p a process*/
     public void removeProcess(Process p) {
         /* TODO: you need to add some code here */
         processes.remove(p);

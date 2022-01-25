@@ -46,7 +46,8 @@ public class Process {
         
     }
 
-    /**This method calculates the process' waiting time.*/
+    /**This method calculates the process' waiting time.
+     * @return This returns the waiting time of the process. */
     public double getWaitingTime()
     {
         /* TODO: you need to add some code here

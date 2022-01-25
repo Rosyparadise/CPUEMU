@@ -1,6 +1,8 @@
-
+/**This class represents the PC where our program runs. */
 public class PC {
 
+    /**This is the main method.
+     * @param args is main's parameter. */
     public static void main(String[] args) {
         /* TODO: You may change this method to perform any tests you like */
         

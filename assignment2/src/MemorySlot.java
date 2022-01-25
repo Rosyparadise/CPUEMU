@@ -1,6 +1,6 @@
+/**This class represents a memory slot.*/
 public class MemorySlot {
 
-    /**This class represents a memory slot.*/
     private int start;
     private int end;
     private final int blockStart;
