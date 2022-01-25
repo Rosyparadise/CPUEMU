@@ -1,6 +1,6 @@
-/**This class represents a Central Processing Unit. */
 import java.util.ArrayList;
 
+/**This class represents a Central Processing Unit. */
 public class CPU {
     
     public static int clock = 0; // this should be incremented on every CPU cycle
@@ -23,7 +23,7 @@ public class CPU {
     private boolean RRchange;
     //true in case a process has been terminated in the current cycle. (Is used to correctly identify an end state of the program)
     private boolean removed;
-
+    // starts from 0 and adds up every cpu cycle until it reaches the quantum of RR
     private int tempQuantum;
 
     /**Class constructor.
@@ -172,14 +172,13 @@ public class CPU {
         if (scheduler instanceof RoundRobin)
         {
             tempQuantum++;
-            if (tempQuantum== ((RoundRobin) scheduler).getQuantum())
+            if (tempQuantum== ((RoundRobin) scheduler).getQuantum() || removed)
             {
                 RRchange=true;
                 tempQuantum=0;
                 currentObjproc = null;
                 currentProcess = -1;
             }
-
         }
         /*program is terminated when there are no processes waiting to be brought to RAM, no processes in ram and no process in CPU.
         * its also terminated when there is a process waiting to be situated in a memory slot but there can never be enough room for it.*/

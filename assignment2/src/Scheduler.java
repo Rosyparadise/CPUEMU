@@ -1,6 +1,6 @@
-/**This class represents a Scheduler. */
 import java.util.ArrayList;
 
+/**This class represents a Scheduler. */
 public abstract class Scheduler {
     
     protected ArrayList<Process> processes; // the list of processes to be executed

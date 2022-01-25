@@ -1,6 +1,6 @@
-/** This class represents a Memory Management Unit. It is responsible for loading processes into the RAM based on an algorithm */
 import java.util.ArrayList;
 
+/** This class represents a Memory Management Unit. It is responsible for loading processes into the RAM based on an algorithm */
 public class MMU {
 
     private final int[] availableBlockSizes;

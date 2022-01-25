@@ -1,6 +1,6 @@
-/**This class implements the First Come First Served scheduling algorithm */
 public class FCFS extends Scheduler {
 
+    /**This class implements the First Come First Served scheduling algorithm */
     /**Class Constructor. */
     public FCFS() {
         /* TODO: you _may_ need to add some code here */

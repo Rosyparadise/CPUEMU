@@ -1,6 +1,6 @@
-/** This class implements the Worst fit memory allocation algorithm. */
 import java.util.ArrayList;
 
+/** This class implements the Worst fit memory allocation algorithm. */
 public class WorstFit extends MemoryAllocationAlgorithm {
 
     /**Class constructor.

@@ -1,6 +1,6 @@
-/** This class implements the First fit memory allocation algorithm. */
 import java.util.ArrayList;
 
+/** This class implements the First fit memory allocation algorithm. */
 public class FirstFit extends MemoryAllocationAlgorithm {
 
     /**Class constructor.

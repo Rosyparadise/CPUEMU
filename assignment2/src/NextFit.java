@@ -1,6 +1,6 @@
-/** This class implements the Next fit memory allocation algorithm. */
 import java.util.ArrayList;
 
+/** This class implements the Next fit memory allocation algorithm. */
 
 public class NextFit extends MemoryAllocationAlgorithm {
     int currentBlock;

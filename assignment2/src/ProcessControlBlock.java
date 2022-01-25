@@ -1,6 +1,6 @@
-/**This class represents a Process Control Block*/
 import java.util.ArrayList;
 
+/**This class represents a Process Control Block*/
 public class ProcessControlBlock {
     
     private final int pid;

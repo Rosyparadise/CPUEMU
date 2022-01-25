@@ -1,6 +1,6 @@
-/** This class implements the Best fit memory allocation algorithm. */
 import java.util.ArrayList;
 
+/** This class implements the Best fit memory allocation algorithm. */
 public class BestFit extends MemoryAllocationAlgorithm {
 
     /**Class constructor.

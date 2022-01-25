@@ -1,6 +1,6 @@
-/** This abstract class represents a Memory Allocation Algorithm*/
 import java.util.ArrayList;
 
+/** This abstract class represents a Memory Allocation Algorithm*/
 public abstract class MemoryAllocationAlgorithm {
 
     protected final int[] availableBlockSizes;
